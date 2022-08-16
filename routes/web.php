@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+//use vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,7 @@ Route::middleware('admin:admin')->group(function () {
 Route::middleware(['auth:sanctum,admin', config('jetstream.auth_session'), 'verified'
 ])->group(function () {
     Route::get('/admin/dashboard', function () {
-        return view('dashboard'); // Ovde bih menjao kom dashboardu zelim admin da pristupi
+        return view('admin-dashboard'); // Ovde bih menjao kom dashboardu zelim admin da pristupi
     })->name('dashboard')->middleware('auth:admin');
 });
 
@@ -36,3 +38,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'
         return view('dashboard');
     })->name('dashboard');
 });
+
+
+Route::get('admin/logout', [AdminController::class, 'destroy'])->name('alogout');
