@@ -41,3 +41,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'
 
 
 Route::get('admin/logout', [AdminController::class, 'destroy'])->name('alogout');
+
+Route::get('/admin/dashboard', [AdminController::class, 'returnData'])->name('admin-dashboard');
+
+Route::post('/insert-place', [AdminController::class, 'insertPlace'])->name('insert-place');
+Route::post('/insert-performance', [AdminController::class, 'insertPerformance'])->name('insert-performance');
+Route::post('/insert-genre', [AdminController::class, 'insertGenre'])->name('insert-genre');
+Route::post('/insert-type', [AdminController::class, 'insertType'])->name('insert-type');
+
