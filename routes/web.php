@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PlaceController;
 //use vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController;
 
 
@@ -16,9 +18,11 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[HomeController::class,'index']);
+
+Route::get("/filter/type/{id}",[HomeController::class,'filter'])->name('filter');
+Route::get("/place/{id}",[PlaceController::class,'index']);
+
 
 Route::middleware('admin:admin')->group(function () {
     Route::get('admin/login', [AdminController::class, 'loginForm']);

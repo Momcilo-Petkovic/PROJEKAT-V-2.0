@@ -187,14 +187,14 @@ class AdminController extends Controller
 
 
         $request->validate([
-            'name'=>'required|unique:performances',
-            'date' => 'required|unique:performances',
+            'name'=>'required:performances',
+            'date' => 'required:performances',
             'starts_at' => ['required','regex:/^(\d|1\d|2[0-3])(\.\d{1,2})?h$/'],
             'ends_at' => ['required','regex:/^(\d|1\d|2[0-3])(\.\d{1,2})?h$/'],
         ]);
 
         $performance = new Performance();
-        $performance->name = $request->name;
+        $performance->performer_name = $request->name;
         $performance->date = $request->date;
         $performance->starts_at = $request->starts_at;
         $performance->ends_at = $request->ends_at;

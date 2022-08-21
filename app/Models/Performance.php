@@ -7,5 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Performance extends Model
 {
+    public function Place(){
+        return $this->belongsTo(Place::class, "place_id","id");
+    }
     use HasFactory;
 }
