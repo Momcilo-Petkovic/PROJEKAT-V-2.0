@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Place;
+use App\Models\Type;
 use App\Models\Performance;
 
 
@@ -13,12 +14,19 @@ class PlaceController extends Controller
 {
     public function index($id){
         $performances = DB::table('performances')
+        ->join('genres', 'genre_id', '=', 'genres.id')
         ->join('places','place_id', '=', 'places.id')
         ->join('types','type_id', '=', 'types.id')
         ->where('places.id', $id)
         ->get();
 
+        $about = DB::table('places')->where('places.id', $id)->get();
+        
+        
+
         //dd($performances);
-        return view('place', compact('performances'));
+        return view('place', compact('performances', 'about'));
     }
+
+  
 }

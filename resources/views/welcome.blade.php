@@ -52,17 +52,17 @@
 
 <body class="bg-cyan-400 w-full">
   <nav class="p-5 bg-white shadow md:flex md:items-center md:justify-between">
-    <div class="flex justify-between items-center ">
+    <a href="{{ url('') }}" class="flex justify-between items-center ">
       <span class="text-2xl font-[Poppins] cursor-pointer">
         <img class="h-10 inline"
           src="https://tailwindcss.com/_next/static/media/social-square.b622e290e82093c36cca57092ffe494f.jpg">
-        tailwind
+        Events Niš
       </span>
 
       <span class="text-3xl cursor-pointer mx-2 md:hidden block">
         <ion-icon name="menu" onclick="Menu(this)"></ion-icon>
       </span>
-    </div>
+    </a>
 
         @foreach ($types as $type)
             <a href="/filter/type/{{$type->id}}" >{{ $type->type_name }}</a>

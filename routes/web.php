@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\ReservationController;
 //use vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController;
 
 
@@ -22,6 +23,8 @@ Route::get('/',[HomeController::class,'index']);
 
 Route::get("/filter/type/{id}",[HomeController::class,'filter'])->name('filter');
 Route::get("/place/{id}",[PlaceController::class,'index']);
+Route::get("/reservation/{id}",[ReservationController::class,'index']);
+Route::post("/reservation/make",[ReservationController::class,'reserve'])->name('make-reservation');
 
 
 Route::middleware('admin:admin')->group(function () {

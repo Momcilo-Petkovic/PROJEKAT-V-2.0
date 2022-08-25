@@ -265,7 +265,7 @@
 
           <select name="genre_id" id="genre_id">
             @foreach ($data as $row)
-              <option value="{{ $row->id }}">{{ $row->name }}</option>
+              <option value="{{ $row->id }}">{{ $row->genre_name }}</option>
             @endforeach
           </select>
           
