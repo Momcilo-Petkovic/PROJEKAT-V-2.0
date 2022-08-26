@@ -347,6 +347,63 @@
       </section>
 
     </div>
+
+    {{-- Reservation Confirmations --}}
+    
+    <h1 class="m-auto text-6xl text-center my-12">All reservations</h1>
+
+    <table class="table-auto m-auto mt-10 mb-10">
+      <thead>
+        <tr class="border-2 p-6 text-center">
+          <th class="border-2 p-6 text-center">First name</th>
+          <th class="border-2 p-6 text-center">Last name</th>
+          <th class="border-2 p-6 text-center">User phone</th>
+          <th class="border-2 p-6 text-center">Place name</th>
+          <th class="border-2 p-6 text-center">Place number</th>
+          <th class="border-2 p-6 text-center">Reservation status</th>
+          <th class="border-2 p-6 text-center">Confirmation input <br> (0 for declined / 1 for confirmed)</th>
+          <th class="p-6 text-center">Submit</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($datar as $d)
+        <form  action="{{ route('insert-confirmation') }}" method="POST" class="grid grid-cols-3 gap-4">
+          @if (Session::has('success'))
+                                <div class="alert alert-success text-black">{{ Session::get('success') }}</div>
+                            @endif
+                            @if (Session::has('fail'))
+                                <div class="alert alert-danger text-black">{{ Session::get('fail') }}</div>
+                            @endif
+                            @csrf
+              <span class="text-danger text-bookmark-pink">@error('name') {{ $message }} @enderror</span>
+
+            <tr class="border-2 p-6 text-center">
+              <td class="border-2 p-6 text-center">{{ $d->first_name }}</td>
+              <td class="border-2 p-6 text-center">{{ $d->last_name }}</td>
+              <td class="border-2 p-6 text-center">{{ $d->user_phone }}</td>
+              <td class="border-2 p-6 text-center">{{ $d->p_name }}</td>
+              <td class="border-2 p-6 text-center">{{ $d->phone_number }}</td>
+
+              <td class="border-2 p-6 text-center">
+              @if ($d->reservation_confirmation === null)
+                Reservation not confirmed yet
+                @elseif ($d->reservation_confirmation == 1)
+                Confirmed
+                @else
+                Refused
+              @endif
+              </td>
+              
+              <td class="border-2 p-6 text-center"><input type="number" name="confirmation" id="confirmation"></td>
+              <td class="p-6 text-center"><button type="submit" class="bg-gray-500 rounded text-white p-2 mt-2 hover:bg-gray-700">Submit</button></td>
+              <td class=""><input type="hidden" name="res_id" id="res_id" value="{{ $d->res_id }}"></td>
+            </tr>
+
+        </form>
+        @endforeach
+      </tbody>
+    </table>
+
 </body>
 </html>
 

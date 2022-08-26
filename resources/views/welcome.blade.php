@@ -131,7 +131,7 @@
 
             <img class="object-cover" src="{{ asset($performance->image_url) }}" alt="">
             <div class="p-4">
-                <div class="text-sm font-semibold">{{ $performance->name }}</div>
+                <div class="text-sm font-semibold">{{ $performance->p_name }}</div>
                 <div class="text-xs text-gray-500">{{ $performance->performer_name }}</div>
             </div>
                 <div class="border-t px-4 py-2">{{ $performance->starts_at }} - {{ $performance->ends_at }}</div>

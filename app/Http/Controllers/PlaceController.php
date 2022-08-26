@@ -22,10 +22,17 @@ class PlaceController extends Controller
 
         $about = DB::table('places')->where('places.id', $id)->get();
         
-        
 
-        //dd($performances);
-        return view('place', compact('performances', 'about'));
+        $comments = DB::table('comments')
+        ->join('places', 'c_place_id', '=', 'places.id')
+        ->join('users', 'c_user_id', '=', 'users.id')
+        ->where('places.id', $id)
+        ->get();
+
+
+
+        //dd($comments);
+        return view('place', compact('performances', 'about', 'comments'));
     }
 
   

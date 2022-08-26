@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\CommentController;
 //use vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController;
 
 
@@ -20,11 +21,16 @@ use App\Http\Controllers\ReservationController;
 */
 
 Route::get('/',[HomeController::class,'index']);
-
 Route::get("/filter/type/{id}",[HomeController::class,'filter'])->name('filter');
+
 Route::get("/place/{id}",[PlaceController::class,'index']);
+
 Route::get("/reservation/{id}",[ReservationController::class,'index']);
 Route::post("/reservation/make",[ReservationController::class,'reserve'])->name('make-reservation');
+
+Route::post('comments', [CommentController::class,'store'])->name('comments');
+
+Route::get('/delete_comment/{id}', [CommentController::class, 'delete']);
 
 
 Route::middleware('admin:admin')->group(function () {
@@ -55,4 +61,5 @@ Route::post('/insert-place', [AdminController::class, 'insertPlace'])->name('ins
 Route::post('/insert-performance', [AdminController::class, 'insertPerformance'])->name('insert-performance');
 Route::post('/insert-genre', [AdminController::class, 'insertGenre'])->name('insert-genre');
 Route::post('/insert-type', [AdminController::class, 'insertType'])->name('insert-type');
+Route::post('/insert-confirmation', [AdminController::class, 'confirmReservation'])->name('insert-confirmation');
 

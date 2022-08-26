@@ -24,6 +24,8 @@ use App\Models\Genre;
 use App\Models\Type;
 use App\Models\Performance;
 
+use DB;
+
 
 
 class AdminController extends Controller
@@ -129,8 +131,14 @@ class AdminController extends Controller
         $data = Genre::all();   
         $datap = Place::all();  
         $datat = Type::all();
+        
+        $datar = DB::table('reservations')
+        ->join('performances','performance_id', '=', 'performances.per_id')
+        ->join('places','performances.place_id', '=', 'places.id')
+        ->get();
+
         // return view('admin-dashboard', ['data'=>$data], ['datap'=>$datap], ['datat'=>$datat]);
-        return view('admin-dashboard', compact('data', 'datap', 'datat'));
+        return view('admin-dashboard', compact('data', 'datap', 'datat', 'datar'));
     }
 
 
@@ -193,6 +201,8 @@ class AdminController extends Controller
             'ends_at' => ['required','regex:/^(\d|1\d|2[0-3])(\.\d{1,2})?h$/'],
         ]);
 
+
+
         $performance = new Performance();
         $performance->performer_name = $request->name;
         $performance->date = $request->date;
@@ -236,6 +246,29 @@ class AdminController extends Controller
             return back()->with('success','You have created a type successfuly');
         }else {
             return back()->with('fail', 'Something went wrong when creating a type');
+        }
+    }
+
+
+    public function confirmReservation(Request $request){
+
+        $request->validate([
+            'confirmation'=>'required'
+        ]);
+
+        $reservation = DB::table('reservations')
+        ->where('res_id', $request->res_id)
+        ->get();
+
+
+        $reservation->confirmation = $request->confirmation;
+
+        $res = DB::update('update reservations set reservation_confirmation = ? where res_id = ?', [$reservation->confirmation, $request->res_id]);
+
+        if($res){
+            return back()->with('success','You have changed the reservation status');
+        }else {
+            return back()->with('fail', 'Something went wrong when changing the reservation status');
         }
     }
 }
