@@ -20,32 +20,6 @@
 
     use App\Models\Type;
 
-    function dan($d){
-        if(strval(date("D", $d)) == "Mon"){
-            return "Ponedeljak";
-        }
-        elseif (strval(date("D", $d)) == "Tue"){
-            return "Utorak";
-        }
-        elseif(strval(date("D", $d)) == "Wed"){
-            return "Sreda";
-        }
-        elseif(strval(date("D", $d)) == "Thu"){
-            return "Cetvrtak";
-        }
-        elseif(strval(date("D", $d)) == "Fri"){
-            return "Petak";
-        }
-        elseif(strval(date("D", $d)) == "Sat"){
-            $x = "Subota";
-            echo "$x";
-        }
-        elseif(strval(date("D", $d)) == "Sun"){
-            $x = "Nedelja";
-            echo "$x";
-        }
-    }
-
     $types = Type::all();
 
 ?>
