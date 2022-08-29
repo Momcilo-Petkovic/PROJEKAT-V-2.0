@@ -343,18 +343,18 @@
 
     {{-- Reservation Confirmations --}}
     
-    <h1 class="m-auto text-6xl text-center my-12">All reservations</h1>
+    <h1 class="m-auto text-6xl text-center my-12">Sve rezervacije</h1>
     <a href="{{ route('export-reservations-pdf') }}"><h3 class="m-auto rounded p-4 bg-green-600 text-white text-center hover:bg-green-700 w-2/6">Export PDF</h3></a>
     <table class="table-auto m-auto mt-10 mb-10">
       <thead>
         <tr class="border-2 p-6 text-center">
-          <th class="border-2 p-6 text-center">First name</th>
-          <th class="border-2 p-6 text-center">Last name</th>
-          <th class="border-2 p-6 text-center">User phone</th>
-          <th class="border-2 p-6 text-center">Place name</th>
-          <th class="border-2 p-6 text-center">Place number</th>
-          <th class="border-2 p-6 text-center">Reservation status</th>
-          <th class="border-2 p-6 text-center">Confirmation input <br> (0 for declined / 1 for confirmed)</th>
+          <th class="border-2 p-6 text-center">Ime</th>
+          <th class="border-2 p-6 text-center">Prezime</th>
+          <th class="border-2 p-6 text-center">Telefon korisnika</th>
+          <th class="border-2 p-6 text-center">Ime mesta</th>
+          <th class="border-2 p-6 text-center">Telefon mesta</th>
+          <th class="border-2 p-6 text-center">Status rezervacije</th>
+          <th class="border-2 p-6 text-center">Potvrda <br> (0 da bi odbili / 1 da bi potvrdili)</th>
           <th class="p-6 text-center">Submit</th>
         </tr>
       </thead>
@@ -379,11 +379,11 @@
 
               <td class="border-2 p-6 text-center">
               @if ($d->reservation_confirmation === null)
-                Reservation not confirmed yet
+                Reservation još uvek nije potvrđena
                 @elseif ($d->reservation_confirmation == 1)
-                Confirmed
+                Rezervacija potvrđena
                 @else
-                Refused
+                Rezervacija odbijena
               @endif
               </td>
               
