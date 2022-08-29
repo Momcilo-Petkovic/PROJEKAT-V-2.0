@@ -18,6 +18,8 @@ class HomeController extends Controller
         ->join('places','place_id', '=', 'places.id')
         ->where('places.type_id',$id)
         ->get();
+
+        $performances = $performances->sortBy('date');
         //dd($performances);
         return view('test', compact('performances'));
     }
@@ -26,6 +28,8 @@ class HomeController extends Controller
         $performances = DB::table('performances')
         ->join('places','place_id', '=', 'places.id')
         ->get();
+
+        $performances = $performances->sortBy('date');
 
         return view('test', compact('performances'));
     }

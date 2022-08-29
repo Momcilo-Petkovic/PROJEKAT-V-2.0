@@ -23,6 +23,8 @@ use App\Models\Place;
 use App\Models\Genre;
 use App\Models\Type;
 use App\Models\Performance;
+use App\Models\Reservation;
+use PDF;
 
 use DB;
 
@@ -124,21 +126,23 @@ class AdminController extends Controller
 
 
 
-
     
 
     public function returnData(){
         $data = Genre::all();   
         $datap = Place::all();  
         $datat = Type::all();
+        $dataper = Performance::all();
         
         $datar = DB::table('reservations')
         ->join('performances','performance_id', '=', 'performances.per_id')
         ->join('places','performances.place_id', '=', 'places.id')
         ->get();
 
+
+        $datar = $datar->sortBy('res_id');
         // return view('admin-dashboard', ['data'=>$data], ['datap'=>$datap], ['datat'=>$datat]);
-        return view('admin-dashboard', compact('data', 'datap', 'datat', 'datar'));
+        return view('admin-dashboard', compact('data', 'datap', 'datat', 'datar', 'dataper'));
     }
 
 
@@ -148,7 +152,7 @@ class AdminController extends Controller
         echo "Upalo u INSER PLACE";
 
         $request->validate([
-            'name'=>'required|unique:places',
+            'p_name'=>'required|unique:places',
             'adress' => 'required|unique:places',
             'work_time' => ['required','regex:/^(\d|1\d|2[0-3])(\.\d{1,2})?h-(\d|1\d|2[0-3])(\.\d{1,2})?h$/'],
             'max_number_people' => 'required|numeric',
@@ -163,7 +167,7 @@ class AdminController extends Controller
         $path = $request->file('image_url')->store('place_images');
 
         $place = new Place();
-        $place->name = $request->name;
+        $place->p_name = $request->p_name;
         $place->adress = $request->adress;
         $place->work_time = $request->work_time;
         $place->max_number_people = $request->max_number_people;
@@ -178,9 +182,9 @@ class AdminController extends Controller
         $res = $place->save();
 
         if($res){
-            return back()->with('success','You have created a place successfuly');
+            return redirect()->back()->with('success','You have created a place successfuly');
         }else {
-            return back()->with('fail', 'Something went wrong when creating a place');
+            return redirect()->back()->with('fail', 'Something went wrong when creating a place');
         }
     }
 
@@ -226,8 +230,8 @@ class AdminController extends Controller
     public function insertGenre(Request $request){
         $genre = new Genre();
         
-        $genre->name = $request->name;
-        ucwords($genre->name);
+        $genre->genre_name = $request->genre_name;
+        ucwords($genre->genre_name);
         $res = $genre->save();
         if($res){
             return back()->with('success','You have created a genre successfuly');
@@ -270,6 +274,52 @@ class AdminController extends Controller
         }else {
             return back()->with('fail', 'Something went wrong when changing the reservation status');
         }
+    }
+
+
+
+
+    public function deletePlace(Request $request){
+        $perid = DB::table('performances')->select('per_id')->where('place_id', '=', $request->id)->get();
+        foreach($perid as $id){
+            $deletedreservations = DB::table('reservations')->where('performance_id', '=', $id->per_id)->delete();
+        }
+        
+        $deletedperformance = DB::table('performances')->where('place_id', '=', $request->id)->delete();
+        $deletedplace = DB::table('places')->where('id', '=', $request->id)->delete();
+     
+
+
+        if($deletedplace){
+            return redirect()->back()->with('success','You have deleted a place');
+        }else {
+            return redirect()->back()->with('fail', 'Something went wrong when deleting a place');
+        }
+    }
+
+    public function deletePerformance(Request $request){
+
+
+        $deletedreservations = DB::table('reservations')->where('performance_id', '=', $request->id)->delete();
+        $deletedperformance = DB::table('performances')->where('per_id', '=', $request->id)->delete();
+     
+
+
+        if($deletedperformance){
+            return redirect()->back()->with('success','You have deleted a performance');
+        }else {
+            return redirect()->back()->with('fail', 'Something went wrong when deleting a performance');
+        }
+    }
+
+
+    public function exportReservations(){
+        $reservations = Reservation::get();
+
+        $pdf = Pdf::loadView('pdf.reservations', [
+            'reservations' => $reservations
+        ]);
+        return $pdf->download('reservations.pdf');
     }
 }
 

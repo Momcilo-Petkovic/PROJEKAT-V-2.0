@@ -12,6 +12,9 @@
 	<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet"> <!--Totally optional :) -->
 
 </head>
+
+
+
 <body class="bg-gray-400 font-sans leading-normal tracking-normal">
 
 	<nav class="flex items-center justify-between flex-wrap bg-gray-800 p-6 fixed w-full z-10 top-0">
@@ -29,16 +32,6 @@
 
 		<div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block pt-6 lg:pt-0" id="nav-content">
 			<ul class="list-reset lg:flex justify-end flex-1 items-center">
-				<li class="mr-3">
-					<a class="inline-block py-2 px-4 text-white no-underline" href="#">Active</a>
-				</li>
-				<li class="mr-3">
-					<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="">link</a>
-				</li>
-				<li class="mr-3">
-					<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="#">link</a>
-				</li>
-				<li class="mr-3">
 					<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="{{ route('alogout') }}">Log out</a>
 				</li>
 			</ul>
@@ -101,10 +94,10 @@
           <input
             type="text"
             class="w-96 mb-2"
-            id="name"
-            name="name"
+            id="p_name"
+            name="p_name"
             placeholder="Name"
-            value="{{ old('name') }}"
+            value="{{ old('p_name') }}"
           />
           
           <input
@@ -259,7 +252,7 @@
           
           <select name="place_id" id="place_id">
             @foreach ($datap as $row)
-              <option value="{{ $row->id }}">{{ $row->name }}</option>
+              <option value="{{ $row->id }}">{{ $row->p_name }}</option>
             @endforeach
           </select>
 
@@ -297,10 +290,10 @@
           <input
             type="text"
             class="w-96 mb-2"
-            id="name"
-            name="name"
+            id="genre_name"
+            name="genre_name"
             placeholder="Genre name"
-            value="{{ old('name') }}"
+            value="{{ old('genre_name') }}"
           />
 
           </select>
@@ -351,7 +344,7 @@
     {{-- Reservation Confirmations --}}
     
     <h1 class="m-auto text-6xl text-center my-12">All reservations</h1>
-
+    <a href="{{ route('export-reservations-pdf') }}"><h3 class="m-auto rounded p-4 bg-green-600 text-white text-center hover:bg-green-700 w-2/6">Export PDF</h3></a>
     <table class="table-auto m-auto mt-10 mb-10">
       <thead>
         <tr class="border-2 p-6 text-center">
@@ -403,6 +396,88 @@
         @endforeach
       </tbody>
     </table>
+
+
+
+    {{-- Place destroyer --}}
+    <h1 class="m-auto text-6xl text-center my-12">Brisanje podataka</h1>
+    <br><br>
+    <h3 class="m-auto text-4xl text-center my-12">Brisanje mesta</h3>
+    <p class="m-auto text-2xl text-center my-12">Brisanje mesta ce obrisati i sve nastupe i rezervacije u odabranom mestu</p>
+    <table class="table-auto m-auto mt-10 mb-10">
+      <thead>
+        <tr class="border-2 p-6 text-center">
+          <th class="border-2 p-6 text-center">ID mesta</th>
+          <th class="border-2 p-6 text-center">Naziv mesta</th>
+          <th class="p-6 text-center">Submit</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($datap as $p)
+        <form  action="/delete-place" method="POST" class="grid grid-cols-3 gap-4">
+          @if (Session::has('success'))
+                                <div class="alert alert-success text-black">{{ Session::get('success') }}</div>
+                            @endif
+                            @if (Session::has('fail'))
+                                <div class="alert alert-danger text-black">{{ Session::get('fail') }}</div>
+                            @endif
+                            @csrf
+              <span class="text-danger text-bookmark-pink">@error('name') {{ $message }} @enderror</span>
+
+            <tr class="border-2 p-6 text-center">
+              <td class="border-2 p-6 text-center">{{ $p->id }}</td>
+              <td class="border-2 p-6 text-center">{{ $p->p_name }}</td>
+              <td class="border-2 p-6 text-center"><button type="submit" class="bg-red-600 rounded text-white p-2 mt-2 hover:bg-red-700">Delete</button></td>
+              <input name="id" id="id" type="hidden" value="{{ $p->id }}">
+            </tr>
+
+        </form>
+        @endforeach
+      </tbody>
+    </table>
+
+    {{-- Performance destroyer --}}
+    <br><br>
+    <h3 class="m-auto text-4xl text-center my-12">Brisanje nastupa</h3>
+    <p class="m-auto text-2xl text-center my-12">Brisanje nastupa ce obrisati i sve rezervacije za taj nastup</p>
+    <table class="table-auto m-auto mt-10 mb-10">
+      <thead>
+        <tr class="border-2 p-6 text-center">
+          <th class="border-2 p-6 text-center">ID nastupa</th>
+          <th class="border-2 p-6 text-center">Naziv izvodjaca</th>
+          <th class="border-2 p-6 text-center">Datum nastupa</th>
+          <th class="p-6 text-center">Submit</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($dataper as $per)
+        <form  action="/delete-performance" method="POST" class="grid grid-cols-3 gap-4">
+          @if (Session::has('success'))
+                                <div class="alert alert-success text-black">{{ Session::get('success') }}</div>
+                            @endif
+                            @if (Session::has('fail'))
+                                <div class="alert alert-danger text-black">{{ Session::get('fail') }}</div>
+                            @endif
+                            @csrf
+              <span class="text-danger text-bookmark-pink">@error('name') {{ $message }} @enderror</span>
+
+            <tr class="border-2 p-6 text-center">
+              <td class="border-2 p-6 text-center">{{ $per->per_id }}</td>
+              <td class="border-2 p-6 text-center">{{ $per->performer_name }}</td>
+              <td class="border-2 p-6 text-center">{{ $per->date }}</td>
+              <td class="border-2 p-6 text-center"><button type="submit" class="bg-red-600 rounded text-white p-2 mt-2 hover:bg-red-700">Delete</button></td>
+              <input name="id" id="id" type="hidden" value="{{ $per->per_id }}">
+            </tr>
+
+        </form>
+        @endforeach
+      </tbody>
+    </table>
+    
+
+    {{-- Type destroyer --}}
+
+
 
 </body>
 </html>

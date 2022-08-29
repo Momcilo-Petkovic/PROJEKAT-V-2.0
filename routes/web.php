@@ -63,3 +63,7 @@ Route::post('/insert-genre', [AdminController::class, 'insertGenre'])->name('ins
 Route::post('/insert-type', [AdminController::class, 'insertType'])->name('insert-type');
 Route::post('/insert-confirmation', [AdminController::class, 'confirmReservation'])->name('insert-confirmation');
 
+Route::post('/delete-place', [AdminController::class, 'deletePlace']);
+Route::post('/delete-performance', [AdminController::class, 'deletePerformance']);
+
+Route::get('/export-reservations-pdf', [AdminController::class, 'exportReservations'])->name('export-reservations-pdf');
