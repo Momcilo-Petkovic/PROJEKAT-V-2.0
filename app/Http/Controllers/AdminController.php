@@ -14,6 +14,7 @@ use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
 
 use App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable;
 use App\Actions\Fortify\AttemptToAuthenticate;
@@ -128,7 +129,7 @@ class AdminController extends Controller
 
     
 
-    public function returnData(){
+    public function returnData(Request $request){
         $data = Genre::all();   
         $datap = Place::all();  
         $datat = Type::all();
@@ -139,10 +140,15 @@ class AdminController extends Controller
         ->join('places','performances.place_id', '=', 'places.id')
         ->get();
 
+        
+        $is_admin = \Auth::guard('admin')->user()->is_admin;
+        $admin_name = \Auth::guard('admin')->user()->name;
+  
+
 
         $datar = $datar->sortBy('res_id');
         // return view('admin-dashboard', ['data'=>$data], ['datap'=>$datap], ['datat'=>$datat]);
-        return view('admin-dashboard', compact('data', 'datap', 'datat', 'datar', 'dataper'));
+        return view('admin-dashboard', compact('data', 'datap', 'datat', 'datar', 'dataper', 'is_admin', 'admin_name'));
     }
 
 

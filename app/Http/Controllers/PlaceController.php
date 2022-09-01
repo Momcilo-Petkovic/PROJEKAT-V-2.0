@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Place;
 use App\Models\Type;
 use App\Models\Performance;
+use Illuminate\Support\Facades\Auth;
 
 
 use DB;
@@ -21,7 +22,16 @@ class PlaceController extends Controller
         ->get();
 
         $about = DB::table('places')->where('places.id', $id)->get();
-        
+
+
+        $is_admin = null;
+        $admin_id = null;
+        if(Auth::guard('admin')->check()){
+            $is_admin = \Auth::guard('admin')->user()->is_admin;
+            $admin_id = \Auth::guard('admin')->user()->id;
+        }
+            
+
 
         $comments = DB::table('comments')
         ->join('places', 'c_place_id', '=', 'places.id')
@@ -32,7 +42,7 @@ class PlaceController extends Controller
 
 
         //dd($comments);
-        return view('place', compact('performances', 'about', 'comments'));
+        return view('place', compact('performances', 'about', 'comments', 'is_admin','admin_id'));
     }
 
   

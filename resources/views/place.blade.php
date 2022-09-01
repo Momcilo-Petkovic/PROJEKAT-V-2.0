@@ -172,14 +172,15 @@
                {{ $comment->comment_body }}
             </p>
           </div>
-          
-          @if (Auth::check())
+          @if (Auth::guard('admin')->check())
+            <div class="pb-4 mt-4 mb-4 ml-4">              
+              <a href="/delete_comment/{{ $comment->c_id }}"   class="m-4 px-4 py-3 text-sm text-blue-100 bg-red-600 rounded">Delete</a>
+            </div>
+         
+          @elseif (Auth::check())
             @if ($comment->c_user_id == Auth::user()->id)
-            <div class="pb-4 mt-4 mb-4 ml-4">
-              
+            <div class="pb-4 mt-4 mb-4 ml-4">              
                 <a href="/delete_comment/{{ $comment->c_id }}"   class="m-4 px-4 py-3 text-sm text-blue-100 bg-red-600 rounded">Delete</a>
-              
-
             </div>
             @endif
           @endif
