@@ -47,6 +47,9 @@ Tipovi korisničkih naloga:
 ## Uputstvo
 
 Prvobitno se moraju izvršiti sve migracije kako bi se stvorila baza podataka.
+```sh
+   php artisan migrate
+```
 
 Nakon što je baza podataka stvorena, potrebno je seedovati kako bi se izvršili svi inserti.
 ```sh
